@@ -134,7 +134,7 @@ export const DataProvider = ({ children }) => {
 
     if (uploadError) {
       console.error('Error uploading file:', uploadError);
-      alert('Error uploading file. Make sure you created the "media" bucket and made it public.');
+      alert(`Error uploading file: ${uploadError.message}\n\nMake sure you created the "media" bucket, made it public, and set up RLS policies.`);
       return null;
     }
 
