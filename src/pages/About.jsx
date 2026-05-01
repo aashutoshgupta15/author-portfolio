@@ -12,7 +12,7 @@ const About = () => {
               "Writing is the footprint of our soul on the sands of time."
             </p>
             <p>
-              I am student who writes to understand the world and express what I cannot say in words.
+              I am student who writes to understand the world and express myself.
             </p>
 
             <div style={{ marginTop: '3rem' }}>
