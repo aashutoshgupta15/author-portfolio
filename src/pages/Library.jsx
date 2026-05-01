@@ -24,7 +24,7 @@ const Library = () => {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '100%' }}>
                   {book.sample_url && (
                     <a href={book.sample_url} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center' }}>
-                      <Download size={16} /> Download Sample
+                      <Download size={16} /> Download
                     </a>
                   )}
                   {book.payment_link && (
