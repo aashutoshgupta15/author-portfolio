@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 const Navbar = () => {
   const location = useLocation();
 
-  const isActive = (path) => location.pathname === path ? 'active' : '';
 
   return (
     <nav className="navbar">

@@ -1,6 +1,9 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 
+/* eslint-disable react-refresh/only-export-components */
+/* eslint-disable react-hooks/set-state-in-effect */
+
 const DataContext = createContext();
 
 export const useData = () => useContext(DataContext);
@@ -9,51 +12,64 @@ export const DataProvider = ({ children }) => {
   const [books, setBooks] = useState([]);
   const [posts, setPosts] = useState([]);
   const [reviews, setReviews] = useState([]);
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem('author_admin_auth') === 'true';
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  async function fetchBooks() {
+    const { data, error } = await supabase.from('books').select('*').order('created_at', { ascending: false });
+    if (data) setBooks(data);
+    else console.error('Error fetching books:', error);
+  }
+
+  async function fetchPosts() {
+    const { data, error } = await supabase.from('posts').select('*').order('created_at', { ascending: false });
+    if (data) setPosts(data);
+    else console.error('Error fetching posts:', error);
+    setLoading(false);
+  }
+
+  async function fetchReviews() {
+    const { data, error } = await supabase.from('reviews').select('*').order('created_at', { ascending: false });
+    if (data) setReviews(data);
+    else console.error('Error fetching reviews:', error);
+  }
 
   // Fetch data from Supabase on load
   useEffect(() => {
     fetchBooks();
     fetchPosts();
     fetchReviews();
+
+    // Check active session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsAuthenticated(!!session);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(!!session);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  const fetchBooks = async () => {
-    const { data, error } = await supabase.from('books').select('*').order('created_at', { ascending: false });
-    if (data) setBooks(data);
-    else console.error('Error fetching books:', error);
-  };
 
-  const fetchPosts = async () => {
-    const { data, error } = await supabase.from('posts').select('*').order('created_at', { ascending: false });
-    if (data) setPosts(data);
-    else console.error('Error fetching posts:', error);
-    setLoading(false);
-  };
 
-  const fetchReviews = async () => {
-    const { data, error } = await supabase.from('reviews').select('*').order('created_at', { ascending: false });
-    if (data) setReviews(data);
-    else console.error('Error fetching reviews:', error);
-  };
-
-  const login = (password) => {
-    // Basic frontend authentication for the dashboard layout
-    // In a production app, you would use Supabase Auth (email/password).
-    if (password === 'admin') {
-      setIsAuthenticated(true);
-      localStorage.setItem('author_admin_auth', 'true');
-      return true;
+  const login = async (email, password) => {
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    
+    if (error) {
+      console.error('Login error:', error.message);
+      return false;
     }
-    return false;
+    return true;
   };
 
-  const logout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem('author_admin_auth');
+  const logout = async () => {
+    await supabase.auth.signOut();
   };
 
   const addBook = async (book) => {

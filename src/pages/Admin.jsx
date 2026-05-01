@@ -3,6 +3,7 @@ import { useData } from '../context/DataContext';
 
 const Admin = () => {
   const { isAuthenticated, login, logout, books, posts, reviews, addBook, deleteBook, updateBook, addPost, deletePost, updatePost, addReview, deleteReview, updateReview, uploadMedia } = useData();
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
@@ -45,12 +46,13 @@ const Admin = () => {
     else setUploadingReviewMedia(false);
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (login(password)) {
+    const success = await login(email, password);
+    if (success) {
       setError('');
     } else {
-      setError('Invalid credentials');
+      setError('Invalid email or password');
     }
   };
 
@@ -98,13 +100,21 @@ const Admin = () => {
       <div className="container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
         <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '300px' }}>
           <h2>Admin Login</h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Password is: <strong>admin</strong></p>
+          <input
+            type="email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            placeholder="Admin Email"
+            style={{ padding: '0.75rem', fontFamily: 'var(--font-ui)', border: '1px solid var(--border-color)', background: 'transparent', color: 'var(--text-primary)' }}
+            required
+          />
           <input
             type="password"
             value={password}
             onChange={e => setPassword(e.target.value)}
             placeholder="Password"
             style={{ padding: '0.75rem', fontFamily: 'var(--font-ui)', border: '1px solid var(--border-color)', background: 'transparent', color: 'var(--text-primary)' }}
+            required
           />
           {error && <span style={{ color: 'red', fontSize: '0.8rem' }}>{error}</span>}
           <button type="submit" className="btn btn-primary">Login</button>

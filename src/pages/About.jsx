@@ -18,7 +18,7 @@ const About = () => {
             <div style={{ marginTop: '3rem' }}>
               <h3 style={{ marginBottom: '1.5rem', fontSize: '1.5rem' }}>Contact</h3>
               <p>For literary representation inquiries, rights, or simply to say hello, please reach out via email.</p>
-              <a href="mailto:hello@authorname.com" className="btn btn-outline" style={{ marginTop: '1rem' }}>
+              <a href="mailto:aashutoshguptaofficial@gmail.com" className="btn btn-outline" style={{ marginTop: '1rem' }}>
                 aashutoshguptaofficial@gmail.com
               </a>
             </div>
