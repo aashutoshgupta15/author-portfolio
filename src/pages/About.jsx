@@ -7,7 +7,7 @@ const About = () => {
             <img src="/author.png" alt="Author portrait" className="about-image" />
           </div>
           <div className="about-content">
-            <h1 style={{ fontFamily: 'var(--font-ui)', fontWeight: 400 }}>About the Author</h1>
+            <h1 style={{ fontFamily: 'var(--font-ui)', fontWeight: 400 }}>About the A.Moon</h1>
             <p className="hero-blurb" style={{ margin: '0 0 2rem 0', fontSize: '1.2rem', color: 'var(--text-primary)' }}>
               "Writing is the footprint of our soul on the sands of time."
             </p>
